@@ -1,0 +1,3 @@
+(Parent) ASIN,(Child) ASIN,Title,Sessions,Page Views,Buy Box Percentage,Units Ordered,Ordered Product Sales,Total Order Items
+B00123P,B00123C,Test Product 1,500,600,99%,50,$1050.00,45
+B00456P,B00456C,Test Product 2,300,350,95%,20,$420.00,18

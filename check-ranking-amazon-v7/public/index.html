@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Amazon Rank Checker — Control Panel</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background: #f7f7f7; color: #222; }
+    h1 { font-size: 22px; margin-bottom: 20px; }
+    input, textarea { padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    textarea { width: 100%; height: 120px; font-family: monospace; }
+    button { padding: 8px 16px; margin-right: 8px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn { background: black; color: white; }
+    .btn-gray { background: gray; color: white; }
+    label { margin-right: 10px; }
+    .flex { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    #logs { width: 100%; height: 400px; background: #0a0b16; color: #00ff99; font-family: monospace; padding: 10px; border-radius: 6px; overflow-y: auto; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Amazon Rank Checker — Control Panel</h1>
+
+  <div class="flex">
+    <label>CONCURRENCY <input id="concurrency" type="number" value="3"></label>
+    <label>MAX_PAGES <input id="maxPages" type="number" value="3"></label>
+    <label>Flush every <input id="flushEvery" type="number" value="50"></label>
+    <label>Ngày xử lý <input id="date" type="date"></label>
+    <label><input type="checkbox" id="batchWrite"> Batch write</label>
+  </div>
+
+  <br>
+  <label>Sheet ID (không lưu .env)</label>
+  <input id="sheetId" type="text" style="width:100%" placeholder="Nhập Google Sheet ID">
+  <br><br>
+
+  <label>cookies.json (hiển thị và có thể dán mới)</label>
+  <textarea id="cookies"></textarea>
+  <button id="saveCookies" class="btn-gray">Lưu cookies</button>
+
+  <div class="flex" style="margin-top:20px;">
+    <button id="runBtn" class="btn">Run</button>
+    <button id="continueBtn" class="btn-gray">Continue</button>
+    <button id="stopBtn" class="btn-gray">Stop</button>
+    <span id="status">Idle</span>
+  </div>
+
+  <h3>Logs</h3>
+  <pre id="logs">--- log stream start ---</pre>
+
+  <script>
+    document.getElementById("date").value = new Date().toISOString().slice(0,10);
+    const cookiesEl = document.getElementById("cookies");
+    const logsEl = document.getElementById("logs");
+    const statusEl = document.getElementById("status");
+
+    async function loadCookies() {
+      const res = await fetch("/api/get-cookies");
+      const data = await res.json();
+      cookiesEl.value = JSON.stringify(data, null, 2);
+    }
+
+    document.getElementById("saveCookies").onclick = async () => {
+      try {
+        const parsed = JSON.parse(cookiesEl.value);
+        const res = await fetch("/api/save-cookies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(parsed)
+        });
+        const data = await res.json();
+        if (data.success) alert("✅ Cookies đã lưu thành công (cookies.json cập nhật)");
+        else alert("❌ Lưu thất bại: " + (data.message || ""));
+      } catch {
+        alert("❌ Cookies không hợp lệ (phải là JSON array)");
+      }
+    };
+
+    async function runWithMode(mode) {
+      logsEl.textContent += "\\n--- Script started (" + mode + ") ---\\n";
+      statusEl.textContent = "Running " + mode + "...";
+
+      const payload = {
+        sheetId: document.getElementById("sheetId").value.trim(),
+        concurrency: document.getElementById("concurrency").value,
+        maxPages: document.getElementById("maxPages").value,
+        flushEvery: document.getElementById("flushEvery").value,
+        batchWrite: document.getElementById("batchWrite").checked,
+        date: document.getElementById("date").value,
+        mode: mode  // "full" hoặc "continue"
+      };
+
+      const res = await fetch("/api/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        logsEl.textContent += decoder.decode(value);
+        logsEl.scrollTop = logsEl.scrollHeight;
+      }
+      statusEl.textContent = "Idle";
+      logsEl.textContent += "\\n--- Script finished (" + mode + ") ---\\n";
+    }
+
+    document.getElementById("runBtn").onclick = async () => {
+      await runWithMode("full");
+    };
+
+    document.getElementById("continueBtn").onclick = async () => {
+      await runWithMode("continue");
+    };
+
+    document.getElementById("stopBtn").onclick = async () => {
+      await fetch("/api/stop");
+      statusEl.textContent = "Stopped";
+      logsEl.textContent += "\\n--- Process stopped ---\\n";
+    };
+
+    loadCookies();
+  </script>
+</body>
+</html>

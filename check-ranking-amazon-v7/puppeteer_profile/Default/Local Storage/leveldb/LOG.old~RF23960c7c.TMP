@@ -1,0 +1,29 @@
+2025/08/30-10:54:37.191 28e684 Creating DB /Users/hello/Downloads/amazon-ranker-local-v3/puppeteer_profile/Default/Local Storage/leveldb since it was missing.
+2025/08/30-10:54:37.195 28e684 Reusing MANIFEST /Users/hello/Downloads/amazon-ranker-local-v3/puppeteer_profile/Default/Local Storage/leveldb/MANIFEST-000001
+2025/08/30-10:55:37.198 28e686 Level-0 table #5: started
+2025/08/30-10:55:37.204 28e686 Level-0 table #5: 40635 bytes OK
+2025/08/30-10:55:37.207 28e686 Delete type=0 #3
+2025/08/30-10:56:40.698 28e686 Level-0 table #7: started
+2025/08/30-10:56:40.706 28e686 Level-0 table #7: 46753 bytes OK
+2025/08/30-10:56:40.709 28e686 Delete type=0 #4
+2025/08/30-10:57:48.425 28e686 Level-0 table #9: started
+2025/08/30-10:57:48.428 28e686 Level-0 table #9: 45525 bytes OK
+2025/08/30-10:57:48.429 28e686 Delete type=0 #6
+2025/08/30-10:58:49.045 28e686 Level-0 table #11: started
+2025/08/30-10:58:49.050 28e686 Level-0 table #11: 46254 bytes OK
+2025/08/30-10:58:49.053 28e686 Delete type=0 #8
+2025/08/30-11:00:38.841 28e686 Level-0 table #13: started
+2025/08/30-11:00:38.854 28e686 Level-0 table #13: 51387 bytes OK
+2025/08/30-11:00:38.859 28e686 Delete type=0 #10
+2025/08/30-11:01:38.838 28e686 Level-0 table #15: started
+2025/08/30-11:01:38.845 28e686 Level-0 table #15: 39647 bytes OK
+2025/08/30-11:01:38.854 28e686 Delete type=0 #12
+2025/08/30-11:01:38.855 28e686 Compacting 4@0 + 1@1 files
+2025/08/30-11:01:38.861 28e686 Generated table #16@0: 284 keys, 48130 bytes
+2025/08/30-11:01:38.862 28e686 Compacted 4@0 + 1@1 files => 48130 bytes
+2025/08/30-11:01:38.863 28e686 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/08/30-11:01:38.864 28e686 Delete type=2 #15
+2025/08/30-11:01:38.864 28e686 Delete type=2 #7
+2025/08/30-11:01:38.864 28e686 Delete type=2 #13
+2025/08/30-11:01:38.864 28e686 Delete type=2 #11
+2025/08/30-11:01:38.864 28e686 Delete type=2 #9
