@@ -1,3 +1,11 @@
-2026/03/06-10:03:04.971 51faec Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
-2026/03/06-10:03:04.972 51faec Recovering log #842
-2026/03/06-10:03:04.973 51faec Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000842.log 
+2026/03/06-10:03:10.629 51fd04 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
+2026/03/06-10:03:10.629 51fd04 Recovering log #842
+2026/03/06-10:03:10.629 51fd04 Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000842.log 
+2026/03/06-10:03:20.077 51fd06 Level-0 table #847: started
+2026/03/06-10:03:20.080 51fd06 Level-0 table #847: 35150 bytes OK
+2026/03/06-10:03:20.083 51fd06 Delete type=0 #842
+2026/03/06-10:03:20.217 51fd06 Level-0 table #849: started
+2026/03/06-10:03:20.219 51fd06 Level-0 table #849: 22507 bytes OK
+2026/03/06-10:03:20.221 51fd06 Delete type=0 #846
+2026/03/06-10:03:47.191 51ffb7 Level-0 table #851: started
+2026/03/06-10:03:47.212 51ffb7 Level-0 table #851: 19996 bytes OK

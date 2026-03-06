@@ -1,11 +1,19 @@
-2026/03/06-10:03:10.629 51fd04 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
-2026/03/06-10:03:10.629 51fd04 Recovering log #842
-2026/03/06-10:03:10.629 51fd04 Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000842.log 
-2026/03/06-10:03:20.077 51fd06 Level-0 table #847: started
-2026/03/06-10:03:20.080 51fd06 Level-0 table #847: 35150 bytes OK
-2026/03/06-10:03:20.083 51fd06 Delete type=0 #842
-2026/03/06-10:03:20.217 51fd06 Level-0 table #849: started
-2026/03/06-10:03:20.219 51fd06 Level-0 table #849: 22507 bytes OK
-2026/03/06-10:03:20.221 51fd06 Delete type=0 #846
-2026/03/06-10:03:47.191 51ffb7 Level-0 table #851: started
-2026/03/06-10:03:47.212 51ffb7 Level-0 table #851: 19996 bytes OK
+2026/03/06-10:17:49.487 52546e Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
+2026/03/06-10:17:49.487 52546e Recovering log #848
+2026/03/06-10:17:49.488 52546e Level-0 table #851: started
+2026/03/06-10:17:49.492 52546e Level-0 table #851: 19996 bytes OK
+2026/03/06-10:17:49.492 52546e Recovering log #850
+2026/03/06-10:17:49.492 52546e Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000850.log 
+2026/03/06-10:17:49.499 52546e Delete type=0 #848
+2026/03/06-10:17:58.937 525471 Level-0 table #853: started
+2026/03/06-10:17:58.939 525471 Level-0 table #853: 23341 bytes OK
+2026/03/06-10:17:58.941 525471 Delete type=0 #850
+2026/03/06-10:17:58.942 525471 Compacting 4@0 + 1@1 files
+2026/03/06-10:17:58.947 525471 Generated table #854@0: 8797 keys, 215996 bytes
+2026/03/06-10:17:58.947 525471 Compacted 4@0 + 1@1 files => 215996 bytes
+2026/03/06-10:17:58.948 525471 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/03/06-10:17:58.949 525471 Delete type=2 #851
+2026/03/06-10:17:58.949 525471 Delete type=2 #844
+2026/03/06-10:17:58.949 525471 Delete type=2 #853
+2026/03/06-10:17:58.949 525471 Delete type=2 #847
+2026/03/06-10:17:58.949 525471 Delete type=2 #849
