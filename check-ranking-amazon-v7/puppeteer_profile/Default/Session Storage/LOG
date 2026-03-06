@@ -1,25 +1,22 @@
-2026/03/06-10:17:49.487 52546e Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
-2026/03/06-10:17:49.487 52546e Recovering log #848
-2026/03/06-10:17:49.488 52546e Level-0 table #851: started
-2026/03/06-10:17:49.492 52546e Level-0 table #851: 19996 bytes OK
-2026/03/06-10:17:49.492 52546e Recovering log #850
-2026/03/06-10:17:49.492 52546e Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000850.log 
-2026/03/06-10:17:49.499 52546e Delete type=0 #848
-2026/03/06-10:17:58.937 525471 Level-0 table #853: started
-2026/03/06-10:17:58.939 525471 Level-0 table #853: 23341 bytes OK
-2026/03/06-10:17:58.941 525471 Delete type=0 #850
-2026/03/06-10:17:58.942 525471 Compacting 4@0 + 1@1 files
-2026/03/06-10:17:58.947 525471 Generated table #854@0: 8797 keys, 215996 bytes
-2026/03/06-10:17:58.947 525471 Compacted 4@0 + 1@1 files => 215996 bytes
-2026/03/06-10:17:58.948 525471 compacted to: files[ 0 1 1 0 0 0 0 ]
-2026/03/06-10:17:58.949 525471 Delete type=2 #851
-2026/03/06-10:17:58.949 525471 Delete type=2 #844
-2026/03/06-10:17:58.949 525471 Delete type=2 #853
-2026/03/06-10:17:58.949 525471 Delete type=2 #847
-2026/03/06-10:17:58.949 525471 Delete type=2 #849
-2026/03/06-10:18:25.587 525471 Level-0 table #856: started
-2026/03/06-10:18:25.594 525471 Level-0 table #856: 23350 bytes OK
-2026/03/06-10:18:25.599 525652 Current memtable full; waiting...
-2026/03/06-10:18:25.615 525471 Delete type=0 #852
-2026/03/06-10:18:25.623 525471 Level-0 table #858: started
-2026/03/06-10:18:25.630 525471 Level-0 table #858: 18457 bytes OK
+2026/03/06-11:04:29.371 533446 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
+2026/03/06-11:04:29.372 533446 Recovering log #855
+2026/03/06-11:04:29.372 533446 Level-0 table #858: started
+2026/03/06-11:04:29.375 533446 Level-0 table #858: 18457 bytes OK
+2026/03/06-11:04:29.376 533446 Recovering log #857
+2026/03/06-11:04:29.376 533446 Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000857.log 
+2026/03/06-11:04:29.380 533446 Delete type=0 #855
+2026/03/06-11:04:38.949 533448 Level-0 table #860: started
+2026/03/06-11:04:38.954 533448 Level-0 table #860: 23295 bytes OK
+2026/03/06-11:04:38.958 533448 Delete type=0 #857
+2026/03/06-11:05:03.864 533448 Level-0 table #862: started
+2026/03/06-11:05:03.868 533448 Level-0 table #862: 23331 bytes OK
+2026/03/06-11:05:03.876 533448 Delete type=0 #859
+2026/03/06-11:05:03.877 533448 Compacting 4@0 + 1@1 files
+2026/03/06-11:05:03.883 533448 Generated table #863@0: 8877 keys, 219991 bytes
+2026/03/06-11:05:03.883 533448 Compacted 4@0 + 1@1 files => 219991 bytes
+2026/03/06-11:05:03.884 533448 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/03/06-11:05:03.885 533448 Delete type=2 #856
+2026/03/06-11:05:03.885 533448 Delete type=2 #854
+2026/03/06-11:05:03.885 533448 Delete type=2 #862
+2026/03/06-11:05:03.885 533448 Delete type=2 #860
+2026/03/06-11:05:03.885 533448 Delete type=2 #858

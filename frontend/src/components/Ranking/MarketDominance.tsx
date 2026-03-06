@@ -5,6 +5,7 @@ import { KeywordClusterSearch } from './KeywordClusterSearch';
 import { DominanceChart } from './DominanceChart';
 import { Loader2, ChevronDown, ChevronUp, RotateCcw, Rocket, Filter as Filters, LayoutGrid, List } from 'lucide-react';
 import { LaunchArchitect } from './LaunchArchitect';
+import { API_BASE_URL } from '../../config/api';
 
 interface MarketDataRow {
     keyword: string;
@@ -59,7 +60,7 @@ export const MarketDominance: React.FC = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/market-dominance`);
+            const response = await fetch(`${API_BASE_URL}/api/ranking/market-dominance`);
             if (!response.ok) throw new Error('Failed to fetch market data');
             const result = await response.json();
             setData(result);
