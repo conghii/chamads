@@ -1,0 +1,7 @@
+check-ranking-amazon-v7/
+frontend/node_modules/
+backend/node_modules/
+.git/
+test_business_report_by_date.csv
+test_business_report_by_asin.csv
+# We need frontend/ and backend/ for the build
