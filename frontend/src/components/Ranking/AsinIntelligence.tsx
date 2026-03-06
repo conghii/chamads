@@ -330,8 +330,6 @@ export const AsinIntelligence: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 100;
 
-    // Tool execution state
-    const [isToolRunning, setIsToolRunning] = useState(false);
 
     // Column visibility
     const [visibleCols, setVisibleCols] = useState<Set<ColumnKey>>(new Set(COLUMN_PRESETS.full));
@@ -802,23 +800,9 @@ export const AsinIntelligence: React.FC = () => {
                             </span>
                             <button
                                 onClick={handleRunTool}
-                                disabled={isToolRunning}
-                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isToolRunning
-                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                                    : 'bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100'
-                                    }`}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100"
                             >
-                                {isToolRunning ? (
-                                    <>
-                                        <Loader2 size={12} className="animate-spin" />
-                                        Running...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Play size={12} />
-                                        Run Ranking Tool
-                                    </>
-                                )}
+                                <Play size={12} /> Run Tool (Local)
                             </button>
                         </div>
                     </div>
