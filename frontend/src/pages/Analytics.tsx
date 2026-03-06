@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useProfit } from '../services/profitService';
 import ky from 'ky';
+import { API_BASE_URL } from '../config/api';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as RePie, Pie, Cell, Legend } from 'recharts';
 import type { BulkAnalysisData } from '../types/analysis';
 import { safeNumber, safePercent, safeCurrency } from '../utils/mathUtils';
@@ -61,8 +62,8 @@ const Analytics: React.FC = () => {
         try {
             setLoading(true);
             const [summaryRes, bulkRes] = await Promise.all([
-                ky.get('${API_BASE_URL}/api/dashboard/summary').json<DashboardSummary>(),
-                ky.get('${API_BASE_URL}/api/analysis/bulk').json<BulkAnalysisData>()
+                ky.get(`${API_BASE_URL}/api/dashboard/summary`).json<DashboardSummary>(),
+                ky.get(`${API_BASE_URL}/api/analysis/bulk`).json<BulkAnalysisData>()
             ]);
             setSummary(summaryRes);
             setBulkData(bulkRes);

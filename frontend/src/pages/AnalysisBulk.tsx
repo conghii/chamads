@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ky from 'ky';
+import { API_BASE_URL } from '../config/api';
 import type { BulkAnalysisData } from '../types/analysis';
 import BulkIntegrity from '../components/analysis/BulkIntegrity';
 import CampaignStrategyMatrix from '../components/analysis/CampaignStrategyMatrix';
@@ -93,8 +94,8 @@ const AnalysisBulk: React.FC = () => {
                 setLoading(true);
                 // Fetch bulk data and dashboard summary (for true Total Sales/TACoS)
                 const [bulkResponse, summaryResponse] = await Promise.all([
-                    ky.get('${API_BASE_URL}/api/analysis/bulk').json<BulkAnalysisData>(),
-                    ky.get('${API_BASE_URL}/api/dashboard/summary').json<any>()
+                    ky.get(`${API_BASE_URL}/api/analysis/bulk`).json<BulkAnalysisData>(),
+                    ky.get(`${API_BASE_URL}/api/dashboard/summary`).json<any>()
                 ]);
                 setData(bulkResponse);
                 setSummary(summaryResponse);

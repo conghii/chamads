@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ky from 'ky';
+import { API_BASE_URL } from '../config/api';
 import type { SearchTermAnalysisData, SearchTermUsage } from '../types/analysis';
 import {
     Search, Filter,
@@ -99,10 +100,10 @@ const HarvestHub: React.FC = () => {
         try {
             setLoading(true);
             const [harvestResponse, summaryResponse] = await Promise.all([
-                ky.get('${API_BASE_URL}/api/analysis/harvest', {
+                ky.get(`${API_BASE_URL}/api/analysis/harvest`, {
                     timeout: 120000 // Increase timeout to 120s for large datasets
                 }).json<SearchTermAnalysisData>(),
-                ky.get('${API_BASE_URL}/api/dashboard/summary', {
+                ky.get(`${API_BASE_URL}/api/dashboard/summary`, {
                     timeout: 60000 // Increase timeout to 60s
                 }).json<any>()
             ]);
