@@ -46,7 +46,7 @@ const RunToolButton = () => {
         if (!confirm('Bắt đầu quét xếp hạng Amazon? Quá trình chạy ngầm và có thể mất vài phút.')) return;
         setRunning(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/run-tool`, { method: 'POST' });
+            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/run-tool`, { method: 'POST' });
             if (!res.ok) throw new Error('Failed');
             alert('✅ Ranking tool đã bắt đầu chạy ngầm.');
         } catch { alert('❌ Lỗi khi khởi chạy tool.'); }

@@ -23,6 +23,7 @@ import CostSettingsDialog from '../components/profit/CostSettingsDialog';
 import ky from 'ky';
 import type { BulkAnalysisData } from '../types/analysis';
 import { safeNumber, safePercent, safeCurrency } from '../utils/mathUtils';
+import { API_BASE_URL } from '../config/api';
 
 const ProfitCalculator: React.FC = () => {
     const { globalConfig, calculateProfit } = useProfit();
@@ -42,8 +43,8 @@ const ProfitCalculator: React.FC = () => {
             try {
                 // Fetch actual bulk data to drive calculations
                 const [bulkData, summaryData] = await Promise.all([
-                    ky.get('http://localhost:3000/api/analysis/bulk').json<BulkAnalysisData>(),
-                    ky.get('http://localhost:3000/api/dashboard/summary').json<any>()
+                    ky.get(`${API_BASE_URL}/api/analysis/bulk`).json<BulkAnalysisData>(),
+                    ky.get(`${API_BASE_URL}/api/dashboard/summary`).json<any>()
                 ]);
                 setData(bulkData);
                 setSummary(summaryData);

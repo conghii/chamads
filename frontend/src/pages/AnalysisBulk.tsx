@@ -93,8 +93,8 @@ const AnalysisBulk: React.FC = () => {
                 setLoading(true);
                 // Fetch bulk data and dashboard summary (for true Total Sales/TACoS)
                 const [bulkResponse, summaryResponse] = await Promise.all([
-                    ky.get('http://localhost:3000/api/analysis/bulk').json<BulkAnalysisData>(),
-                    ky.get('http://localhost:3000/api/dashboard/summary').json<any>()
+                    ky.get('${API_BASE_URL}/api/analysis/bulk').json<BulkAnalysisData>(),
+                    ky.get('${API_BASE_URL}/api/dashboard/summary').json<any>()
                 ]);
                 setData(bulkResponse);
                 setSummary(summaryResponse);

@@ -23,6 +23,7 @@ import {
 import { Link } from 'react-router-dom';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, ReferenceLine, BarChart, Bar } from 'recharts';
 import { safeNumber, safePercent, safeCurrency } from '../utils/mathUtils';
+import { API_BASE_URL } from '../config/api';
 
 interface DashboardData {
     dataFreshness: {
@@ -70,7 +71,7 @@ export function Dashboard() {
             const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
 
             try {
-                const response = await fetch('http://localhost:3000/api/dashboard/summary', {
+                const response = await fetch(`${API_BASE_URL}/api/dashboard/summary`, {
                     signal: controller.signal
                 });
                 clearTimeout(timeoutId);

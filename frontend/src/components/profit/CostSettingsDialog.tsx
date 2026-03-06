@@ -16,7 +16,7 @@ const CostSettingsDialog: React.FC<CostSettingsDialogProps> = ({ isOpen, onClose
 
     useEffect(() => {
         if (isOpen) {
-            fetch('http://localhost:3000/api/products')
+            fetch('${API_BASE_URL}/api/products')
                 .then(res => res.json())
                 .then(data => setProducts(data.filter((p: any) => p.asin)));
         }

@@ -61,8 +61,8 @@ const Analytics: React.FC = () => {
         try {
             setLoading(true);
             const [summaryRes, bulkRes] = await Promise.all([
-                ky.get('http://localhost:3000/api/dashboard/summary').json<DashboardSummary>(),
-                ky.get('http://localhost:3000/api/analysis/bulk').json<BulkAnalysisData>()
+                ky.get('${API_BASE_URL}/api/dashboard/summary').json<DashboardSummary>(),
+                ky.get('${API_BASE_URL}/api/analysis/bulk').json<BulkAnalysisData>()
             ]);
             setSummary(summaryRes);
             setBulkData(bulkRes);

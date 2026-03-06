@@ -348,7 +348,7 @@ export const AsinIntelligence: React.FC = () => {
         if (!confirm('Start the backend ranking scraper? This might take several minutes and runs in the background.')) return;
         setIsToolRunning(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/run-tool`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/run-tool`, {
                 method: 'POST'
             });
             if (!response.ok) throw new Error('Failed to start tool');
@@ -444,7 +444,7 @@ export const AsinIntelligence: React.FC = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/asin-intelligence`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/asin-intelligence`);
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || errorData.message || `HTTP error! status: ${response.status}`);
@@ -475,7 +475,7 @@ export const AsinIntelligence: React.FC = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/products`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/products`);
             const productList = await res.json();
             if (Array.isArray(productList) && productList.length > 0) {
                 setProducts(productList);
@@ -488,7 +488,7 @@ export const AsinIntelligence: React.FC = () => {
 
     const fetchTrackedKeywords = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/tracked-keywords`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/tracked-keywords`);
             const { keywords } = await res.json();
             setTrackedKeywords(new Set(keywords.map((k: string) => k.toLowerCase())));
         } catch (err) {
@@ -503,7 +503,7 @@ export const AsinIntelligence: React.FC = () => {
 
         setTrackingInProgress(prev => new Set(prev).add(kw.toLowerCase()));
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/track`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/track`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { ProductCostConfig, GlobalProfitConfig, ProfitBreakdown } from '../types/profit';
 import ky from 'ky';
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = `${API_BASE_URL}/api`;
 
 interface ProfitContextType {
     costConfigs: Record<string, ProductCostConfig>;

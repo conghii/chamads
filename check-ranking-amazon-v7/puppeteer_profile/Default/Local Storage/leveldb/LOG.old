@@ -1,5 +1,5 @@
-2026/03/05-22:30:54.289 4f49a6 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Local Storage/leveldb/MANIFEST-000001
-2026/03/05-22:30:54.291 4f49a6 Recovering log #393
-2026/03/05-22:30:54.294 4f49a6 Level-0 table #395: started
-2026/03/05-22:30:54.299 4f49a6 Level-0 table #395: 639565 bytes OK
-2026/03/05-22:30:54.303 4f49a6 Delete type=0 #393
+2026/03/06-10:03:04.047 51faec Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Local Storage/leveldb/MANIFEST-000001
+2026/03/06-10:03:04.052 51faec Recovering log #399
+2026/03/06-10:03:04.058 51faec Level-0 table #402: started
+2026/03/06-10:03:04.064 51faec Level-0 table #402: 566692 bytes OK
+2026/03/06-10:03:04.067 51faec Delete type=0 #399

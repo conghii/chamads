@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { API_BASE_URL } from '../config/api';
 import { RankingHeader } from '../components/Ranking/RankingHeader';
 import { RankingMatrix } from '../components/Ranking/RankingMatrix';
 import { KeywordChart } from '../components/Ranking/KeywordChart';
@@ -72,7 +73,7 @@ const RankingPage: React.FC = () => {
     const fetchRankingData = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking`);
+            const response = await fetch(`${API_BASE_URL}/api/ranking`);
             let data = await response.json();
             if (!data || data.length === 0) data = [];
 

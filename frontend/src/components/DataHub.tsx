@@ -14,7 +14,7 @@ export function DataHub() {
         const fetchBusinessReportData = async () => {
             try {
                 // Using team1 as default for now to match backend
-                const response = await fetch('http://localhost:3000/api/business-report/metadata/team1');
+                const response = await fetch('${API_BASE_URL}/api/business-report/metadata/team1');
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status) {
@@ -35,7 +35,7 @@ export function DataHub() {
     const handleSyncRequest = async (data: MasterKeywordRecord[], rawData: any[], fileType: RawFileType) => {
         setIsProcessing(true);
         try {
-            const response = await fetch('http://localhost:3000/api/sync', {
+            const response = await fetch('${API_BASE_URL}/api/sync', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

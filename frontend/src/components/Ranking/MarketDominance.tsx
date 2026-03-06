@@ -59,7 +59,7 @@ export const MarketDominance: React.FC = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/market-dominance`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/market-dominance`);
             if (!response.ok) throw new Error('Failed to fetch market data');
             const result = await response.json();
             setData(result);

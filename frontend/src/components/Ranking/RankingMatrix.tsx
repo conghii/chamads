@@ -233,7 +233,7 @@ export const RankingMatrix: React.FC<RankingMatrixProps> = ({
     // Track keyword handler
     const handleTrackKeyword = async (asin: string, keyword: string, sv?: number, ads?: number | null) => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/track`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/track`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ asin, keyword, searchVolume: sv, ads })

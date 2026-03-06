@@ -32,7 +32,7 @@ export const MyAsin: React.FC = () => {
     const fetchProducts = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/products`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/products`);
             if (!response.ok) throw new Error('Failed to fetch products');
             const result = await response.json();
             setProducts(result);
@@ -59,7 +59,7 @@ export const MyAsin: React.FC = () => {
         try {
             const productsToSave = Array.isArray(productData) ? productData : [productData];
             const promises = productsToSave.map(p =>
-                fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/products`, {
+                fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/products`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(p)

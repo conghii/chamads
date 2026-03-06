@@ -99,10 +99,10 @@ const HarvestHub: React.FC = () => {
         try {
             setLoading(true);
             const [harvestResponse, summaryResponse] = await Promise.all([
-                ky.get('http://localhost:3000/api/analysis/harvest', {
+                ky.get('${API_BASE_URL}/api/analysis/harvest', {
                     timeout: 120000 // Increase timeout to 120s for large datasets
                 }).json<SearchTermAnalysisData>(),
-                ky.get('http://localhost:3000/api/dashboard/summary', {
+                ky.get('${API_BASE_URL}/api/dashboard/summary', {
                     timeout: 60000 // Increase timeout to 60s
                 }).json<any>()
             ]);

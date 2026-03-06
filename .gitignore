@@ -8,6 +8,8 @@ dist/
 build/
 .next/
 out/
+backend/dist/
+frontend/dist/
 
 # IDEs and editors
 .vscode/

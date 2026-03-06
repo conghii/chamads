@@ -2,14 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { ClipboardList, Download, Trash2, ArrowRight, Pause, Briefcase, Plus, Minus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useActionQueue } from '../services/actionQueueService';
-import type { ActionType, ActionStatus } from '../services/actionQueueService';
 import ActionExportDialog from '../components/actions/ActionExportDialog';
 
 // Types for UI Filters
 type TabFilter = 'all' | 'harvest' | 'negate' | 'pause' | 'exported';
 
 export const ActionQueue: React.FC = () => {
-    const { actions, stats, clearQueue, markAsExported, updateAction } = useActionQueue();
+    const { actions, clearQueue } = useActionQueue();
     const [activeTab, setActiveTab] = useState<TabFilter>('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedActionIds, setSelectedActionIds] = useState<Set<string>>(new Set());

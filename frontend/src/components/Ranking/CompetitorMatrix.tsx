@@ -91,7 +91,7 @@ export const CompetitorMatrix: React.FC<CompetitorMatrixProps> = ({
             const asin = prompt('Enter ASIN to add this keyword to Listing Plan:', myAsin || '');
             if (!asin) return;
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/products`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/products`);
             const products = await response.json();
             const product = products.find((p: any) => p.asin === asin);
 
@@ -108,7 +108,7 @@ export const CompetitorMatrix: React.FC<CompetitorMatrixProps> = ({
 
             product.listingPlan = [...currentPlan, keyword].join(', ');
 
-            const saveResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/products`, {
+            const saveResponse = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/products`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(product)
@@ -130,7 +130,7 @@ export const CompetitorMatrix: React.FC<CompetitorMatrixProps> = ({
             const asin = prompt('Enter ASIN to track this keyword for:', myAsin || '');
             if (!asin) return;
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ranking/track`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/track`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ asin, keyword, searchVolume })

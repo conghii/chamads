@@ -32,7 +32,7 @@ if (!admin.apps.length) {
     }
 }
 
-const app = express();
+export const app = express();
 const port = Number(process.env.PORT) || 3000;
 
 const rankerDir = path.resolve(__dirname, '../../check-ranking-amazon-v7');
@@ -453,11 +453,13 @@ app.post('/api/profit/config/product', async (req, res): Promise<void> => {
     }
 });
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`=========================================`);
-    console.log(`🚀 MASTER DATA HUB SERVER STARTED`);
-    console.log(`📍 Port: ${port}`);
-    console.log(`🔥 Firebase Project: ${admin.app().options.projectId || 'Unknown'}`);
-    console.log(`=========================================`);
-    setupRankCheckerAutomation();
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`=========================================`);
+        console.log(`🚀 MASTER DATA HUB SERVER STARTED`);
+        console.log(`📍 Port: ${port}`);
+        console.log(`🔥 Firebase Project: ${admin.app().options.projectId || 'Unknown'}`);
+        console.log(`=========================================`);
+        setupRankCheckerAutomation();
+    });
+}
