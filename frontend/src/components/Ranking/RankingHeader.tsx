@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
     Search, TrendingUp, TrendingDown, Trophy, Target, Hash, Columns, X,
-    ChevronDown, Loader2, Play
+    ChevronDown, Play
 } from 'lucide-react';
 import type { RankType, TrendFilter, RankRange, SVRange } from '../../pages/RankingPage';
 
@@ -39,23 +39,15 @@ interface RankingHeaderProps {
     onVisibleColumnsChange: (cols: any) => void;
 }
 
-// Run Tool button
+// Run Tool button - Refactored to open local tool on port 3001
 const RunToolButton = () => {
-    const [running, setRunning] = useState(false);
-    const handleRun = async () => {
-        if (!confirm('Bắt đầu quét xếp hạng Amazon? Quá trình chạy ngầm và có thể mất vài phút.')) return;
-        setRunning(true);
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/run-tool`, { method: 'POST' });
-            if (!res.ok) throw new Error('Failed');
-            alert('✅ Ranking tool đã bắt đầu chạy ngầm.');
-        } catch { alert('❌ Lỗi khi khởi chạy tool.'); }
-        finally { setRunning(false); }
+    const handleRun = () => {
+        window.open('http://localhost:3001', '_blank');
     };
     return (
-        <button onClick={handleRun} disabled={running}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${running ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100'}`}>
-            {running ? <><Loader2 size={12} className="animate-spin" /> Running...</> : <><Play size={12} /> Run Tool</>}
+        <button onClick={handleRun}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100">
+            <Play size={12} /> Run Tool (Local)
         </button>
     );
 };

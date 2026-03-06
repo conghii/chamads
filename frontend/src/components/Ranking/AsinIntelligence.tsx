@@ -8,6 +8,7 @@ import {
     Plus, Check, Package, Rocket, Play, Download, Copy, ExternalLink, Columns3
 } from 'lucide-react';
 import { AsinCharts } from './AsinCharts';
+import { API_BASE_URL } from '../../config/api';
 
 // Types
 interface AsinKeywordRow {
@@ -344,21 +345,8 @@ export const AsinIntelligence: React.FC = () => {
     const applyPreset = (name: string) => setVisibleCols(new Set(COLUMN_PRESETS[name]));
     const isColVisible = (col: ColumnKey) => visibleCols.has(col);
 
-    const handleRunTool = async () => {
-        if (!confirm('Start the backend ranking scraper? This might take several minutes and runs in the background.')) return;
-        setIsToolRunning(true);
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/run-tool`, {
-                method: 'POST'
-            });
-            if (!response.ok) throw new Error('Failed to start tool');
-            alert('Ranking tool started successfully in the background.');
-        } catch (err: any) {
-            console.error(err);
-            alert(`Error starting tool: ${err.message}`);
-        } finally {
-            setIsToolRunning(false);
-        }
+    const handleRunTool = () => {
+        window.open('http://localhost:3001', '_blank');
     };
 
     // ─── Chart filter handlers ───
@@ -444,7 +432,7 @@ export const AsinIntelligence: React.FC = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/asin-intelligence`);
+            const response = await fetch(`${API_BASE_URL}/api/asin-intelligence`);
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || errorData.message || `HTTP error! status: ${response.status}`);
@@ -475,7 +463,7 @@ export const AsinIntelligence: React.FC = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/products`);
+            const res = await fetch(`${API_BASE_URL}/api/products`);
             const productList = await res.json();
             if (Array.isArray(productList) && productList.length > 0) {
                 setProducts(productList);
@@ -488,7 +476,7 @@ export const AsinIntelligence: React.FC = () => {
 
     const fetchTrackedKeywords = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/tracked-keywords`);
+            const res = await fetch(`${API_BASE_URL}/api/ranking/tracked-keywords`);
             const { keywords } = await res.json();
             setTrackedKeywords(new Set(keywords.map((k: string) => k.toLowerCase())));
         } catch (err) {
@@ -503,7 +491,7 @@ export const AsinIntelligence: React.FC = () => {
 
         setTrackingInProgress(prev => new Set(prev).add(kw.toLowerCase()));
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || '${API_BASE_URL}'}/api/ranking/track`, {
+            const res = await fetch(`${API_BASE_URL}/api/ranking/track`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
