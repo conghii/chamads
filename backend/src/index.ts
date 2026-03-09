@@ -15,6 +15,7 @@ import { spawn } from 'child_process';
 import cron from 'node-cron';
 import { SheetsService } from './services/sheetsService';
 import { BusinessReportService } from './services/businessReportService';
+import { cacheService } from './services/cacheService';
 import { MasterKeywordRecord, RawFileType } from './types';
 
 dotenv.config();
@@ -121,9 +122,6 @@ app.post('/api/sync', async (req, res): Promise<void> => {
         const { data, rawData, fileType } = req.body as SyncRequestBody;
 
         logDebug(`[Sync] Received: ${data.length} master records, ${rawData?.length || 0} raw rows, type: ${fileType}`);
-        if (rawData && rawData.length > 0) {
-            logDebug(`[Sync] First raw row keys: ${Object.keys(rawData[0]).slice(0, 10).join(', ')}`);
-        }
 
         if (!data || !Array.isArray(data)) {
             res.status(400).json({ error: 'Invalid data format' });
@@ -133,56 +131,66 @@ app.post('/api/sync', async (req, res): Promise<void> => {
         await sheetsService.initialize();
         await sheetsService.syncData(data, rawData || [], fileType);
 
+        // Clear cache on sync to ensure fresh data for next loads
+        cacheService.clear();
+
         if (fileType === 'AMAZON_BUSINESS_REPORT' && rawData && rawData.length > 0) {
             logDebug(`[Sync] Business Report detected (${rawData.length} rows). Saving metadata for team1...`);
             const businessReportService = new BusinessReportService();
             const teamId = 'team1';
             await businessReportService.saveMetadata(teamId, rawData, 'Raw_Business_Report');
-            logDebug(`[Sync] Business Report metadata save finished successfully.`);
-        } else if (fileType === 'AMAZON_BUSINESS_REPORT') {
-            logDebug(`[Sync] WARNING: Business Report type detected but rawData is missing or empty!`);
         }
 
         res.json({ success: true, count: data.length });
     } catch (error: any) {
         console.error('Sync error:', error);
-
-        let details = error.message;
-        if (error.code === 5 || error.message?.includes('NOT_FOUND')) {
-            details = 'Firestore database not found. Please ensure you have created a Firestore database in "Native Mode" in the Firebase Console (https://console.firebase.google.com/project/amazon-data-hub/firestore).';
-        }
-
         res.status(500).json({
             error: 'Internal Server Error',
-            details: details,
-            code: error.code,
-            stack: error.stack
+            details: error.message
         });
     }
 });
 
-// Business Report Metadata Endpoint
-app.get('/api/business-report/metadata/:teamId', async (req, res): Promise<void> => {
+// Dashboard Summary Endpoint
+app.get('/api/dashboard/summary', async (req, res): Promise<void> => {
     try {
-        const { teamId } = req.params;
-        const businessReportService = new BusinessReportService();
-        const metadata = await businessReportService.getMetadata(teamId);
-        if (metadata) {
-            res.json(metadata);
-        } else {
-            res.status(404).json({ error: 'No business report metadata found' });
+        const cacheKey = 'dashboard_summary';
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            res.json(cached);
+            return;
         }
-    } catch (error: any) {
-        console.error('Business Report Metadata GET error:', error);
-        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+
+        if (!sheetId || !clientEmail || !privateKey) {
+            res.status(500).json({ error: 'Server misconfiguration' });
+            return;
+        }
+
+        await sheetsService.initialize();
+        const { DashboardService } = await import('./services/dashboardService');
+        const dashboardService = new DashboardService(sheetsService.getDoc());
+
+        const data = await dashboardService.getDashboardSummary();
+        cacheService.set(cacheKey, data);
+        res.json(data);
+    } catch (error) {
+        console.error('Dashboard Summary API error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
 // Analysis Bulk endpoint
 app.get('/api/analysis/bulk', async (req, res): Promise<void> => {
     try {
+        const cacheKey = 'bulk_analysis';
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            res.json(cached);
+            return;
+        }
+
         if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration: Missing Google Sheets credentials' });
+            res.status(500).json({ error: 'Server misconfiguration' });
             return;
         }
 
@@ -191,22 +199,26 @@ app.get('/api/analysis/bulk', async (req, res): Promise<void> => {
         const analysisService = new BulkAnalysisService(sheetsService.getDoc());
 
         const analysisData = await analysisService.getBulkAnalysis();
-
+        cacheService.set(cacheKey, analysisData);
         res.json(analysisData);
     } catch (error) {
         console.error('Analysis error:', error);
-        res.status(500).json({
-            error: 'Internal Server Error',
-            details: error instanceof Error ? error.message : String(error),
-            stack: error instanceof Error ? error.stack : undefined
-        });
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 // Harvest Hub Analysis
 app.get('/api/analysis/harvest', async (req, res): Promise<void> => {
     try {
+        const cacheKey = 'harvest_analysis';
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            res.json(cached);
+            return;
+        }
+
         if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration: Missing Google Sheets credentials' });
+            res.status(500).json({ error: 'Server misconfiguration' });
             return;
         }
 
@@ -215,15 +227,11 @@ app.get('/api/analysis/harvest', async (req, res): Promise<void> => {
         const stService = new SearchTermAnalysisService(sheetsService.getDoc());
 
         const harvestData = await stService.analyzeSearchTerms();
-
+        cacheService.set(cacheKey, harvestData);
         res.json(harvestData);
     } catch (error) {
         console.error('Harvest Analysis error:', error);
-        res.status(500).json({
-            error: 'Internal Server Error',
-            details: error instanceof Error ? error.message : String(error),
-            stack: error instanceof Error ? error.stack : undefined
-        });
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
@@ -231,9 +239,15 @@ app.get('/api/analysis/harvest', async (req, res): Promise<void> => {
 app.get('/api/ranking', async (req, res): Promise<void> => {
     try {
         const asin = req.query.asin as string | undefined;
+        const cacheKey = `ranking_${asin || 'all'}`;
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            res.json(cached);
+            return;
+        }
 
         if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration: Missing Google Sheets credentials' });
+            res.status(500).json({ error: 'Server misconfiguration' });
             return;
         }
 
@@ -242,24 +256,66 @@ app.get('/api/ranking', async (req, res): Promise<void> => {
         const rankingService = new RankingService(sheetsService.getDoc());
 
         const data = await rankingService.getRankingData(asin);
+        cacheService.set(cacheKey, data);
         res.json(data);
     } catch (error) {
         console.error('Ranking API error:', error);
-        res.status(500).json({
-            error: 'Internal Server Error',
-            details: error instanceof Error ? error.message : String(error)
-        });
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Trigger Ranking Tool Endpoint
-app.post('/api/ranking/run-tool', async (req, res): Promise<void> => {
+// ASIN Intelligence Endpoint
+app.get('/api/asin-intelligence', async (req, res): Promise<void> => {
     try {
-        triggerRankCheck();
-        res.json({ success: true, message: 'Rank checker started in the background.' });
+        const cacheKey = 'asin_intelligence';
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            res.json(cached);
+            return;
+        }
+
+        if (!sheetId || !clientEmail || !privateKey) {
+            res.status(500).json({ error: 'Server misconfiguration' });
+            return;
+        }
+
+        await sheetsService.initialize();
+        const { AsinIntelligenceService } = await import('./services/asinIntelligenceService');
+        const service = new AsinIntelligenceService(sheetsService.getDoc());
+
+        const data = await service.getIntelligence();
+        cacheService.set(cacheKey, data);
+        res.json(data);
     } catch (error) {
-        console.error('Run Tool API error:', error);
-        res.status(500).json({ error: 'Internal Server Error', details: error instanceof Error ? error.message : String(error) });
+        console.error('ASIN Intelligence API error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Market Dominance Endpoint
+app.get('/api/ranking/market-dominance', async (req, res): Promise<void> => {
+    try {
+        await sheetsService.initialize();
+        const { RankingService } = await import('./services/rankingService');
+        const rankingService = new RankingService(sheetsService.getDoc());
+        const data = await rankingService.getMarketDominanceData();
+        res.json(data);
+    } catch (error) {
+        console.error('Market Dominance error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/api/ranking/domination-audit', async (req, res): Promise<void> => {
+    try {
+        await sheetsService.initialize();
+        const { RankingService } = await import('./services/rankingService');
+        const rankingService = new RankingService(sheetsService.getDoc());
+        const data = await rankingService.getDominationAuditData();
+        res.json(data);
+    } catch (error) {
+        console.error('Domination Audit error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
@@ -267,40 +323,23 @@ app.post('/api/ranking/run-tool', async (req, res): Promise<void> => {
 app.post('/api/ranking/track', async (req, res): Promise<void> => {
     try {
         const { asin, keyword, searchVolume, ads } = req.body;
-        if (!asin || !keyword) {
-            res.status(400).json({ error: 'Missing asin or keyword' });
-            return;
-        }
-
-        if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration' });
-            return;
-        }
-
         await sheetsService.initialize();
-        // Use 'Rank Organic' as the default tracking sheet
         const result = await sheetsService.addKeywordToTracking('Rank Organic', { asin, keyword, searchVolume, ads });
-
         res.json({ success: true, added: result.added, message: result.message });
     } catch (error) {
-        console.error('Tracking API error:', error);
+        console.error('Tracking error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Get all tracked keywords from Rank Organic
+// Get all tracked keywords
 app.get('/api/ranking/tracked-keywords', async (req, res): Promise<void> => {
     try {
-        if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration' });
-            return;
-        }
-
         await sheetsService.initialize();
         const keywords = await sheetsService.getTrackedKeywords('Rank Organic');
         res.json({ keywords });
     } catch (error) {
-        console.error('Tracked keywords API error:', error);
+        console.error('Tracked keywords error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -314,7 +353,24 @@ app.get('/api/products', async (req, res): Promise<void> => {
         const products = await productService.getProducts();
         res.json(products);
     } catch (error) {
-        console.error('Products GET error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/products/delete', async (req, res): Promise<void> => {
+    try {
+        const { asins } = req.body;
+        if (!asins || !Array.isArray(asins)) {
+            res.status(400).json({ error: 'ASINs array is required' });
+            return;
+        }
+        await sheetsService.initialize();
+        const { ProductService } = await import('./services/productService');
+        const productService = new ProductService(sheetsService.getDoc());
+        await productService.deleteProducts(asins);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Delete products error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -327,86 +383,16 @@ app.post('/api/products', async (req, res): Promise<void> => {
         await productService.saveProduct(req.body);
         res.json({ success: true });
     } catch (error) {
-        console.error('Products POST error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Market Dominance Endpoint
-app.get('/api/ranking/market-dominance', async (req, res): Promise<void> => {
+// Trigger Ranking Tool
+app.post('/api/ranking/run-tool', async (req, res): Promise<void> => {
     try {
-        if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration' });
-            return;
-        }
-
-        await sheetsService.initialize();
-        const { RankingService } = await import('./services/rankingService');
-        const rankingService = new RankingService(sheetsService.getDoc());
-
-        const data = await rankingService.getMarketDominanceData();
-        res.json(data);
+        triggerRankCheck();
+        res.json({ success: true, message: 'Rank checker started.' });
     } catch (error) {
-        console.error('Market Dominance API error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-app.get('/api/ranking/domination-audit', async (req, res): Promise<void> => {
-    try {
-        if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration' });
-            return;
-        }
-
-        await sheetsService.initialize();
-        const { RankingService } = await import('./services/rankingService');
-        const rankingService = new RankingService(sheetsService.getDoc());
-
-        const data = await rankingService.getDominationAuditData();
-        res.json(data);
-    } catch (error) {
-        console.error('Domination Audit API error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// ASIN Intelligence Endpoint
-app.get('/api/asin-intelligence', async (req, res): Promise<void> => {
-    try {
-        if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration' });
-            return;
-        }
-
-        await sheetsService.initialize();
-        const { AsinIntelligenceService } = await import('./services/asinIntelligenceService');
-        const service = new AsinIntelligenceService(sheetsService.getDoc());
-
-        const data = await service.getIntelligence();
-        res.json(data);
-    } catch (error) {
-        console.error('ASIN Intelligence API error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Dashboard Summary Endpoint
-app.get('/api/dashboard/summary', async (req, res): Promise<void> => {
-    try {
-        if (!sheetId || !clientEmail || !privateKey) {
-            res.status(500).json({ error: 'Server misconfiguration' });
-            return;
-        }
-
-        await sheetsService.initialize();
-        const { DashboardService } = await import('./services/dashboardService');
-        const dashboardService = new DashboardService(sheetsService.getDoc());
-
-        const data = await dashboardService.getDashboardSummary();
-        res.json(data);
-    } catch (error) {
-        console.error('Dashboard Summary API error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -420,12 +406,7 @@ app.get('/api/profit/config', async (req, res): Promise<void> => {
         const productConfigs = await service.getProductConfigs();
         res.json({ globalConfig, productConfigs });
     } catch (error: any) {
-        console.error('Profit Config GET error details:', {
-            message: error.message,
-            stack: error.stack,
-            code: error.code
-        });
-        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
@@ -436,7 +417,6 @@ app.post('/api/profit/config/global', async (req, res): Promise<void> => {
         await service.updateGlobalConfig(req.body);
         res.json({ success: true });
     } catch (error) {
-        console.error('Profit Global Config POST error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -448,18 +428,17 @@ app.post('/api/profit/config/product', async (req, res): Promise<void> => {
         await service.updateProductConfig(req.body);
         res.json({ success: true });
     } catch (error) {
-        console.error('Profit Product Config POST error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-    app.listen(port, '0.0.0.0', () => {
+    const server = app.listen(port, '0.0.0.0', () => {
         console.log(`=========================================`);
         console.log(`🚀 MASTER DATA HUB SERVER STARTED`);
         console.log(`📍 Port: ${port}`);
-        console.log(`🔥 Firebase Project: ${admin.app().options.projectId || 'Unknown'}`);
         console.log(`=========================================`);
         setupRankCheckerAutomation();
     });
+    server.timeout = 600000; // 10 minutes
 }

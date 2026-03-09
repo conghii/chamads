@@ -75,7 +75,12 @@ const RankingPage: React.FC = () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/ranking`);
             let data = await response.json();
-            if (!data || data.length === 0) data = [];
+            if (!Array.isArray(data)) {
+                console.error('Invalid ranking data received:', data);
+                setRankingData([]);
+                setLoading(false);
+                return;
+            }
 
             // Fix encoding on keywords
             data = data.map((item: KeywordRanking) => ({

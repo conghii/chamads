@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UploadComponent } from './UploadComponent';
 import { useUploadHistory } from '../services/uploadHistoryService';
+import { API_BASE_URL } from '../config/api';
 import type { MasterKeywordRecord, RawFileType } from '../types';
 import classNames from 'classnames';
 import { BarChart2, Search, Brain, TrendingUp, CheckCircle, Clock, Trash2, ExternalLink, RefreshCw, Briefcase } from 'lucide-react';
@@ -14,7 +15,7 @@ export function DataHub() {
         const fetchBusinessReportData = async () => {
             try {
                 // Using team1 as default for now to match backend
-                const response = await fetch('${API_BASE_URL}/api/business-report/metadata/team1');
+                const response = await fetch(`${API_BASE_URL}/api/business-report/metadata/team1`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status) {
@@ -35,7 +36,7 @@ export function DataHub() {
     const handleSyncRequest = async (data: MasterKeywordRecord[], rawData: any[], fileType: RawFileType) => {
         setIsProcessing(true);
         try {
-            const response = await fetch('${API_BASE_URL}/api/sync', {
+            const response = await fetch(`${API_BASE_URL}/api/sync`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

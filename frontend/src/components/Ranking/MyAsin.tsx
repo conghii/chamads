@@ -36,9 +36,15 @@ export const MyAsin: React.FC = () => {
             const response = await fetch(`${API_BASE_URL}/api/products`);
             if (!response.ok) throw new Error('Failed to fetch products');
             const result = await response.json();
-            setProducts(result);
+            if (Array.isArray(result)) {
+                setProducts(result);
+            } else {
+                console.error('Invalid products data:', result);
+                setProducts([]);
+            }
         } catch (err: any) {
             console.error(err.message || 'Error loading products');
+            setProducts([]);
         } finally {
             setLoading(false);
         }
@@ -131,6 +137,34 @@ export const MyAsin: React.FC = () => {
         if (newSet.has(asin)) newSet.delete(asin);
         else newSet.add(asin);
         setSelectedAsins(newSet);
+    };
+
+    const handleBulkDelete = async () => {
+        if (selectedAsins.size === 0) return;
+
+        const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa ${selectedAsins.size} sản phẩm đã chọn?`);
+        if (!confirmDelete) return;
+
+        try {
+            setLoading(true);
+            const response = await fetch(`${API_BASE_URL}/api/products/delete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ asins: Array.from(selectedAsins) })
+            });
+
+            if (!response.ok) throw new Error('Xóa sản phẩm thất bại');
+
+            const result = await response.json();
+            if (result.success) {
+                setSelectedAsins(new Set());
+                await fetchProducts();
+            }
+        } catch (err: any) {
+            alert('Lỗi khi xóa sản phẩm: ' + err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (loading) {
@@ -442,7 +476,12 @@ export const MyAsin: React.FC = () => {
                     <div className="flex gap-2">
                         <button className="px-3 py-1.5 rounded-lg hover:bg-slate-700 text-sm font-medium transition-colors">So sánh Đỉnh</button>
                         <button className="px-3 py-1.5 rounded-lg hover:bg-slate-700 text-sm font-medium transition-colors">Đổi Status</button>
-                        <button className="px-3 py-1.5 rounded-lg hover:bg-red-900/50 text-red-400 text-sm font-medium transition-colors">Xóa</button>
+                        <button
+                            onClick={handleBulkDelete}
+                            className="px-3 py-1.5 rounded-lg hover:bg-red-900/50 text-red-400 text-sm font-medium transition-colors"
+                        >
+                            Xóa
+                        </button>
                     </div>
                     <button onClick={() => setSelectedAsins(new Set())} className="ml-2 p-1 hover:bg-slate-700 rounded-full"><Plus className="rotate-45" size={20} /></button>
                 </div>

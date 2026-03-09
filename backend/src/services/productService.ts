@@ -75,4 +75,24 @@ export class ProductService {
             await sheet.addRow(rowData);
         }
     }
+
+    async deleteProducts(asins: string[]): Promise<void> {
+        const sheet = this.doc.sheetsByTitle['My_ASIN'];
+        if (!sheet) {
+            throw new Error("'My_ASIN' sheet not found.");
+        }
+
+        await sheet.loadHeaderRow();
+        const rows = await sheet.getRows();
+
+        const asinsToDelete = new Set(asins.map(a => a.toUpperCase()));
+
+        // Find rows that match the ASINs and delete them
+        for (const row of rows) {
+            const rowAsin = (row.get('ASIN') || '').toString().toUpperCase();
+            if (asinsToDelete.has(rowAsin)) {
+                await row.delete();
+            }
+        }
+    }
 }

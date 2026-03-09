@@ -94,15 +94,29 @@ const AnalysisBulk: React.FC = () => {
                 setLoading(true);
                 // Fetch bulk data and dashboard summary (for true Total Sales/TACoS)
                 const [bulkResponse, summaryResponse] = await Promise.all([
-                    ky.get(`${API_BASE_URL}/api/analysis/bulk`).json<BulkAnalysisData>(),
-                    ky.get(`${API_BASE_URL}/api/dashboard/summary`).json<any>()
+                    ky.get(`${API_BASE_URL}/api/analysis/bulk`).json<BulkAnalysisData>().catch(err => {
+                        console.error('Bulk API error:', err);
+                        return null;
+                    }),
+                    ky.get(`${API_BASE_URL}/api/dashboard/summary`).json<any>().catch(err => {
+                        console.error('Summary API error:', err);
+                        return null;
+                    })
                 ]);
-                setData(bulkResponse);
-                setSummary(summaryResponse);
-                setError(null);
-            } catch (err) {
-                console.error('Failed to fetch analysis data:', err);
-                setError('Failed to load analysis data. Please ensure you have synced a Bulk file first.');
+
+                if (bulkResponse) {
+                    setData(bulkResponse);
+                    setError(null);
+                } else {
+                    setError('Failed to load bulk analysis data.');
+                }
+
+                if (summaryResponse) {
+                    setSummary(summaryResponse);
+                }
+            } catch (error) {
+                console.error('Error in AnalysisBulk:', error);
+                setError('A critical error occurred while loading data.');
             } finally {
                 setLoading(false);
             }

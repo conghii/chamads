@@ -1,22 +1,22 @@
-2026/03/06-11:04:29.371 533446 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
-2026/03/06-11:04:29.372 533446 Recovering log #855
-2026/03/06-11:04:29.372 533446 Level-0 table #858: started
-2026/03/06-11:04:29.375 533446 Level-0 table #858: 18457 bytes OK
-2026/03/06-11:04:29.376 533446 Recovering log #857
-2026/03/06-11:04:29.376 533446 Reusing old log /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/000857.log 
-2026/03/06-11:04:29.380 533446 Delete type=0 #855
-2026/03/06-11:04:38.949 533448 Level-0 table #860: started
-2026/03/06-11:04:38.954 533448 Level-0 table #860: 23295 bytes OK
-2026/03/06-11:04:38.958 533448 Delete type=0 #857
-2026/03/06-11:05:03.864 533448 Level-0 table #862: started
-2026/03/06-11:05:03.868 533448 Level-0 table #862: 23331 bytes OK
-2026/03/06-11:05:03.876 533448 Delete type=0 #859
-2026/03/06-11:05:03.877 533448 Compacting 4@0 + 1@1 files
-2026/03/06-11:05:03.883 533448 Generated table #863@0: 8877 keys, 219991 bytes
-2026/03/06-11:05:03.883 533448 Compacted 4@0 + 1@1 files => 219991 bytes
-2026/03/06-11:05:03.884 533448 compacted to: files[ 0 1 1 0 0 0 0 ]
-2026/03/06-11:05:03.885 533448 Delete type=2 #856
-2026/03/06-11:05:03.885 533448 Delete type=2 #854
-2026/03/06-11:05:03.885 533448 Delete type=2 #862
-2026/03/06-11:05:03.885 533448 Delete type=2 #860
-2026/03/06-11:05:03.885 533448 Delete type=2 #858
+2026/03/09-14:32:11.921 839c75 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Session Storage/MANIFEST-000001
+2026/03/09-14:32:11.922 839c75 Recovering log #909
+2026/03/09-14:32:11.922 839c75 Level-0 table #912: started
+2026/03/09-14:32:11.925 839c75 Level-0 table #912: 18257 bytes OK
+2026/03/09-14:32:11.927 839c75 Delete type=0 #909
+2026/03/09-14:32:20.866 839c77 Level-0 table #915: started
+2026/03/09-14:32:20.868 839c77 Level-0 table #915: 21967 bytes OK
+2026/03/09-14:32:20.869 839c77 Delete type=0 #913
+2026/03/09-14:32:20.872 839c77 Compacting 4@0 + 1@1 files
+2026/03/09-14:32:20.876 839c77 Generated table #916@0: 9507 keys, 257255 bytes
+2026/03/09-14:32:20.876 839c77 Compacted 4@0 + 1@1 files => 257255 bytes
+2026/03/09-14:32:20.877 839c77 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/03/09-14:32:20.877 839c77 Delete type=2 #908
+2026/03/09-14:32:20.877 839c77 Delete type=2 #915
+2026/03/09-14:32:20.877 839c77 Delete type=2 #910
+2026/03/09-14:32:20.877 839c77 Delete type=2 #905
+2026/03/09-14:32:20.877 839c77 Delete type=2 #912
+2026/03/09-14:32:21.234 839c77 Level-0 table #918: started
+2026/03/09-14:32:21.235 839c77 Level-0 table #918: 22035 bytes OK
+2026/03/09-14:32:21.237 839c77 Delete type=0 #914
+2026/03/09-14:32:50.696 83a086 Level-0 table #920: started
+2026/03/09-14:32:50.714 83a086 Level-0 table #920: 25498 bytes OK

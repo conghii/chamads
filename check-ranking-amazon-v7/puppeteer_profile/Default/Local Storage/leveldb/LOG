@@ -1,17 +1,8 @@
-2026/03/06-11:04:28.565 533446 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Local Storage/leveldb/MANIFEST-000001
-2026/03/06-11:04:28.568 533446 Recovering log #407
-2026/03/06-11:04:28.571 533446 Level-0 table #410: started
-2026/03/06-11:04:28.576 533446 Level-0 table #410: 622434 bytes OK
-2026/03/06-11:04:28.580 533446 Delete type=0 #407
-2026/03/06-11:04:28.584 533448 Compacting 4@0 + 1@1 files
-2026/03/06-11:04:28.599 533448 Generated table #412@0: 21345 keys, 1290027 bytes
-2026/03/06-11:04:28.599 533448 Compacted 4@0 + 1@1 files => 1290027 bytes
-2026/03/06-11:04:28.600 533448 compacted to: files[ 0 1 1 0 0 0 0 ]
-2026/03/06-11:04:28.601 533448 Delete type=2 #405
-2026/03/06-11:04:28.601 533448 Delete type=2 #410
-2026/03/06-11:04:28.601 533448 Delete type=2 #402
-2026/03/06-11:04:28.601 533448 Delete type=2 #400
-2026/03/06-11:04:28.601 533448 Delete type=2 #408
-2026/03/06-11:05:04.303 533458 Level-0 table #414: started
-2026/03/06-11:05:04.323 533458 Level-0 table #414: 127784 bytes OK
-2026/03/06-11:05:04.331 533458 Delete type=0 #411
+2026/03/09-14:32:11.324 839c75 Reusing MANIFEST /Users/phamhuucong/Desktop/Web app/ChamMPPC/check-ranking-amazon-v7/puppeteer_profile/Default/Local Storage/leveldb/MANIFEST-000001
+2026/03/09-14:32:11.326 839c75 Recovering log #449
+2026/03/09-14:32:11.326 839c75 Level-0 table #452: started
+2026/03/09-14:32:11.329 839c75 Level-0 table #452: 60880 bytes OK
+2026/03/09-14:32:11.331 839c75 Delete type=0 #449
+2026/03/09-14:32:50.671 839c77 Level-0 table #455: started
+2026/03/09-14:32:50.681 839c77 Level-0 table #455: 51834 bytes OK
+2026/03/09-14:32:50.714 839c77 Delete type=0 #453
