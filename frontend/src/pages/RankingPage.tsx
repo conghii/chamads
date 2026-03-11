@@ -73,7 +73,7 @@ const RankingPage: React.FC = () => {
     const fetchRankingData = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/api/ranking`);
+            const response = await fetch(`${API_BASE_URL}/api/ranking`, { cache: 'no-store' });
             let data = await response.json();
             if (!Array.isArray(data)) {
                 console.error('Invalid ranking data received:', data);
@@ -118,8 +118,14 @@ const RankingPage: React.FC = () => {
         });
         let sorted = Array.from(uniqueDates);
         sorted.sort((a, b) => {
-            const [d1, m1] = a.split('/').map(Number);
-            const [d2, m2] = b.split('/').map(Number);
+            // Check for valid format assuming "DD/MM" or "D/M" or "DD/M" or "D/MM"
+            let [d1, m1] = a.split('/').map(Number);
+            let [d2, m2] = b.split('/').map(Number);
+
+            // Fallback for unexpected formats
+            if (isNaN(d1) || isNaN(m1)) return 1;
+            if (isNaN(d2) || isNaN(m2)) return -1;
+
             if (m1 !== m2) return m2 - m1;
             return d2 - d1;
         });

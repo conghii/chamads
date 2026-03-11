@@ -410,6 +410,29 @@ async function findRankOnPage(page, asin) {
   }, asin);
 }
 
+async function autoScroll(page) {
+  try {
+    await page.evaluate(async () => {
+      await new Promise((resolve) => {
+        var totalHeight = 0;
+        var distance = 250;
+        var timer = setInterval(() => {
+          var scrollHeight = document.body.scrollHeight;
+          window.scrollBy(0, distance);
+          totalHeight += distance;
+
+          if (totalHeight >= scrollHeight - window.innerHeight || totalHeight > 15000) {
+            clearInterval(timer);
+            resolve();
+          }
+        }, 150);
+      });
+    });
+  } catch (err) {
+    // Ignore context destroyed errors when skipping pages
+  }
+}
+
 async function checkKeywordRank(page, keyword, asin) {
   let finalOrganic = "Not In Top 150";
   let finalSponsored = "-";
@@ -424,6 +447,7 @@ async function checkKeywordRank(page, keyword, asin) {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
     try {
       await page.waitForSelector('div[data-component-type="s-search-result"]', { timeout: 8000 });
+      await autoScroll(page);
     } catch { }
 
     const ranks = await findRankOnPage(page, asin);
@@ -544,9 +568,7 @@ async function main() {
         try {
           const rank = await checkKeywordRank(p, keyword, asin);
           await writeCell(spreadsheetId, colLetter, rowIndex, rank);
-          console.log(
-            `🔁 [${myIndex + 1}/${pending.length}] ${keyword} [${asin}] → ${rank} @ ${colLetter}${rowIndex}`
-          );
+          console.log(`🔁 [${myIndex + 1}/${pending.length}] ${keyword} [${asin}] → ${JSON.stringify(rank)} @ ${colLetter}${rowIndex}`);
         } catch (e) {
           console.warn(`⚠️ Lỗi "${keyword}": ${e.message}`);
           await writeCell(spreadsheetId, colLetter, rowIndex, "ERR");
@@ -616,7 +638,7 @@ async function main() {
         try {
           const rank = await checkKeywordRank(p, kw, asin);
           results[myIndex] = rank;
-          console.log(`🔍 ${kw} [${asin}] → ${rank}`);
+          console.log(`🔍 ${kw} [${asin}] → ${JSON.stringify(rank)}`);
         } catch (e) {
           console.warn(`⚠️ Lỗi "${kw}": ${e.message}`);
           results[myIndex] = "ERR";

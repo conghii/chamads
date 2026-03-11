@@ -66,9 +66,18 @@ const Sparkline = ({ history, dates }: { history: any[]; dates: string[] }) => {
 const RankCell = ({ rank, delta, prevRank, type }: {
     rank: number | null; delta: number; prevRank: number | null; type: 'org' | 'spn'
 }) => {
-    // Empty cell (no data)
-    if (!rank || rank > 150) {
+    // Empty cell (no data at all)
+    if (rank === null) {
         return <div className="w-full flex-1 flex items-center justify-center min-h-[28px]" />;
+    }
+
+    // Unranked (> 150)
+    if (rank > 150) {
+        return (
+            <div className="w-full flex-1 rounded flex flex-col items-center justify-center min-h-[28px]">
+                <span className="text-[10px] text-slate-300 font-medium">150+</span>
+            </div>
+        );
     }
 
     // Badge styling

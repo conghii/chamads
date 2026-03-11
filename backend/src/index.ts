@@ -71,6 +71,9 @@ function triggerRankCheck() {
 
     runProcess.on('close', (code) => {
         console.log(`✅ Automated Ranking Check finished with code ${code}`);
+        // Clear cache so that the next API request fetches fresh data from Google Sheets
+        cacheService.clear();
+        console.log('🧹 Ranking cache cleared.');
     });
 }
 
